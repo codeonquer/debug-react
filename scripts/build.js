@@ -13,45 +13,10 @@ const rimraf = require('rimraf');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
+const { babelForClient, babelForServer } = require('./babel');
+const { reactAlias, reactEnv } = require('./react');
+
 const isProduction = process.env.NODE_ENV === 'production';
-
-const babelForClient = {
-  babelrc: false,
-  sourceType: 'unambiguous',
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        corejs: 3,
-        useBuiltIns: 'usage',
-        modules: false,
-        targets: {
-          browsers: ['iOS >= 13']
-        }
-      }
-    ],
-    '@babel/preset-react',
-    '@babel/preset-flow'
-  ]
-};
-
-const babelForServer = {
-  babelrc: false,
-  sourceType: 'unambiguous',
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        modules: 'commonjs',
-        targets: {
-          node: '14.15'
-        }
-      }
-    ],
-    '@babel/preset-react',
-    '@babel/preset-flow'
-  ]
-};
 
 rimraf.sync(path.resolve(__dirname, '../build'));
 webpack(
@@ -77,8 +42,14 @@ webpack(
             ],
             exclude: /node_modules/,
           },
-        ],
+        ]
       },
+      plugins: [
+        new webpack.DefinePlugin(reactEnv),
+      ],
+      resolve: {
+        alias: reactAlias
+      }
     },
     {
       target: 'node14.15',
@@ -107,6 +78,12 @@ webpack(
           },
         ],
       },
+      plugins: [
+        new webpack.DefinePlugin(reactEnv),
+      ],
+      resolve: {
+        alias: reactAlias
+      }
     }
   ],
   (err, stats) => {

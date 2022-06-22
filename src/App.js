@@ -7,7 +7,6 @@
  */
 
 import React, {Suspense, lazy} from 'react';
-import {ErrorBoundary} from 'react-error-boundary';
 import Html from './Html';
 import Spinner from './Spinner';
 import Layout from './Layout';
@@ -21,9 +20,7 @@ export default function App({assets}) {
   return (
     <Html assets={assets} title="Hello">
       <Suspense fallback={<Spinner />}>
-        <ErrorBoundary FallbackComponent={Error}>
-          <Content />
-        </ErrorBoundary>
+        <Content />
       </Suspense>
     </Html>
   );
