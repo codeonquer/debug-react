@@ -6,7 +6,7 @@
  *
  */
 
-import * as React from "react";
+import React from "react";
 // import {renderToString} from 'react-dom/server';
 import { renderToPipeableStream } from "react-dom/server";
 import App from "../src/App";

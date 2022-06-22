@@ -8,18 +8,10 @@
 
 'use strict';
 
-const babelRegister = require('@babel/register');
-babelRegister({
-  ignore: [/[\\\/](build|server\/server|node_modules)[\\\/]/],
-  presets: [['react-app', {runtime: 'automatic'}]],
-  plugins: ['@babel/transform-modules-commonjs'],
-});
-
 const express = require('express');
 const compress = require('compression');
 const {readFileSync} = require('fs');
 const path = require('path');
-const render = require('./render');
 const {JS_BUNDLE_DELAY} = require('./delays');
 
 const PORT = process.env.PORT || 4000;
@@ -40,6 +32,7 @@ app.get(
   '/',
   handleErrors(async function(req, res) {
     await waitForWebpack();
+    const render = require('../build/render');
     render(req.url, res);
   })
 );
@@ -84,6 +77,7 @@ async function waitForWebpack() {
   while (true) {
     try {
       readFileSync(path.resolve(__dirname, '../build/main.js'));
+      readFileSync(path.resolve(__dirname, '../build/render.js'));
       return;
     } catch (err) {
       console.log(

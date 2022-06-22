@@ -6,6 +6,8 @@
  *
  */
 
+import React from 'react';
+
 export default function Html({ assets, children, title }) {
   return (
     <html lang="en">

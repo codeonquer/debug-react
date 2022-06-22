@@ -6,6 +6,7 @@
  *
  */
 
+import React from 'react';
 export default function Spinner({active = true}) {
   return (
     <div
